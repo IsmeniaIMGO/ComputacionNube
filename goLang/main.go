@@ -61,9 +61,64 @@ func main() {
 
 }
 
+func seleccionarCarpeta() (string, []os.FileInfo) {
+	rutaCarpeta, err := dialog.Directory().Title("Seleccione una carpeta").Browse()
+	if err != nil {
+		fmt.Println("Error seleccionando la carpeta:", err)
+		return "", nil
+	}
+
+	files, err := ioutil.ReadDir(rutaCarpeta)
+	if err != nil {
+		fmt.Println("Error leyendo la carpeta:", err)
+		return rutaCarpeta, nil
+	}
+
+	return rutaCarpeta, files
+}
+
+func filtrarImagenes(files []os.FileInfo) []string {
+	var imagenes []string
+	for _, file := range files {
+		if !file.IsDir() {
+			nombreArchivo := file.Name()
+			if strings.HasSuffix(strings.ToLower(nombreArchivo), ".jpg") ||
+				strings.HasSuffix(strings.ToLower(nombreArchivo), ".jpeg") ||
+				strings.HasSuffix(strings.ToLower(nombreArchivo), ".png") {
+				imagenes = append(imagenes, nombreArchivo)
+			}
+		}
+	}
+	return imagenes
+}
+
+func seleccionarImagenesAleatorias(cantidad int) []string {
+
+	rutaCarpeta, files := seleccionarCarpeta()
+	if rutaCarpeta == "" || files == nil {
+		return nil
+	}
+
+	imagenes := filtrarImagenes(files)
+	if len(imagenes) < cantidad {
+		fmt.Printf("No hay suficientes imágenes en la carpeta. Se encontraron %d imágenes.\n", len(imagenes))
+		return nil
+	}
+
+	rand.Seed(time.Now().UnixNano())
+	var imagenesSeleccionadas []string
+	for i := 0; i < cantidad; i++ {
+		indice := rand.Intn(len(imagenes))
+		imagenesSeleccionadas = append(imagenesSeleccionadas, rutaCarpeta+"\\"+imagenes[indice])
+		imagenes = append(imagenes[:indice], imagenes[indice+1:]...)
+	}
+
+	return imagenesSeleccionadas
+}
+
 func punto1() {
 
-	fmt.Println("Holaaaaaa uwu")
+	fmt.Println("Holaaaaaa")
 
 }
 
@@ -110,24 +165,9 @@ func punto3() {
 	fmt.Printf("Hostname: %s\n", hostname)
 }
 
-func seleccionarCarpeta() string {
-	rutaCarpeta, err := dialog.Directory().Title("Seleccione una carpeta").Browse()
-	if err != nil {
-		fmt.Println("Error seleccionando la carpeta:", err)
-		return ""
-	}
-	return rutaCarpeta
-}
-
 func punto4() {
-	rutaCarpeta := seleccionarCarpeta()
-	if rutaCarpeta == "" {
-		return
-	}
-
-	files, err := ioutil.ReadDir(rutaCarpeta)
-	if err != nil {
-		fmt.Println("Error leyendo la carpeta:", err)
+	rutaCarpeta, files := seleccionarCarpeta()
+	if rutaCarpeta == "" || files == nil {
 		return
 	}
 
@@ -138,55 +178,26 @@ func punto4() {
 }
 
 func punto5() {
-	rutaCarpeta := seleccionarCarpeta()
-	if rutaCarpeta == "" {
+	rutaCarpeta, files := seleccionarCarpeta()
+	if rutaCarpeta == "" || files == nil {
 		return
 	}
 
-	files, err := ioutil.ReadDir(rutaCarpeta)
-	if err != nil {
-		fmt.Println("Error leyendo la carpeta:", err)
-		return
-	}
-
+	imagenes := filtrarImagenes(files)
 	fmt.Println("Imágenes en la carpeta:", rutaCarpeta)
-	for _, file := range files {
-		if !file.IsDir() {
-			nombreArchivo := file.Name()
-			if strings.HasSuffix(strings.ToLower(nombreArchivo), ".jpg") ||
-				strings.HasSuffix(strings.ToLower(nombreArchivo), ".jpeg") ||
-				strings.HasSuffix(strings.ToLower(nombreArchivo), ".png") {
-				fmt.Println(nombreArchivo)
-			}
-		}
+	for _, imagen := range imagenes {
+		fmt.Println(imagen)
 	}
 }
 
 func punto6() {
-	rutaCarpeta := seleccionarCarpeta()
-	if rutaCarpeta == "" {
+	rutaCarpeta, files := seleccionarCarpeta()
+	if rutaCarpeta == "" || files == nil {
 		return
 	}
 
-	files, err := ioutil.ReadDir(rutaCarpeta)
-	if err != nil {
-		fmt.Println("Error leyendo la carpeta:", err)
-		return
-	}
-
-	var imagenes []string
+	imagenes := filtrarImagenes(files)
 	totalArchivos := len(files)
-
-	for _, file := range files {
-		if !file.IsDir() {
-			nombreArchivo := file.Name()
-			if strings.HasSuffix(strings.ToLower(nombreArchivo), ".jpg") ||
-				strings.HasSuffix(strings.ToLower(nombreArchivo), ".jpeg") ||
-				strings.HasSuffix(strings.ToLower(nombreArchivo), ".png") {
-				imagenes = append(imagenes, nombreArchivo)
-			}
-		}
-	}
 
 	fmt.Printf("Total de archivos en la carpeta: %d\n", totalArchivos)
 	fmt.Printf("Total de imágenes en la carpeta: %d\n", len(imagenes))
@@ -197,30 +208,12 @@ func punto6() {
 }
 
 func punto7() string {
-	rutaCarpeta := seleccionarCarpeta()
-	if rutaCarpeta == "" {
+	rutaCarpeta, files := seleccionarCarpeta()
+	if rutaCarpeta == "" || files == nil {
 		return ""
 	}
 
-	files, err := ioutil.ReadDir(rutaCarpeta)
-	if err != nil {
-		fmt.Println("Error leyendo la carpeta:", err)
-		return ""
-	}
-
-	var imagenes []string
-
-	for _, file := range files {
-		if !file.IsDir() {
-			nombreArchivo := file.Name()
-			if strings.HasSuffix(strings.ToLower(nombreArchivo), ".jpg") ||
-				strings.HasSuffix(strings.ToLower(nombreArchivo), ".jpeg") ||
-				strings.HasSuffix(strings.ToLower(nombreArchivo), ".png") {
-				imagenes = append(imagenes, nombreArchivo)
-			}
-		}
-	}
-
+	imagenes := filtrarImagenes(files)
 	if len(imagenes) == 0 {
 		fmt.Println("No se encontraron imágenes en la carpeta.")
 		return ""
@@ -253,47 +246,6 @@ func punto8() {
 	// Muestra el contenido codificado en la terminal
 	fmt.Println("Contenido de la imagen en Base64:")
 	fmt.Println(codificado)
-}
-
-func seleccionarImagenesAleatorias(cantidad int) []string {
-	rutaCarpeta := seleccionarCarpeta()
-	if rutaCarpeta == "" {
-		return nil
-	}
-
-	files, err := ioutil.ReadDir(rutaCarpeta)
-	if err != nil {
-		fmt.Println("Error leyendo la carpeta:", err)
-		return nil
-	}
-
-	var imagenes []string
-
-	for _, file := range files {
-		if !file.IsDir() {
-			nombreArchivo := file.Name()
-			if strings.HasSuffix(strings.ToLower(nombreArchivo), ".jpg") ||
-				strings.HasSuffix(strings.ToLower(nombreArchivo), ".jpeg") ||
-				strings.HasSuffix(strings.ToLower(nombreArchivo), ".png") {
-				imagenes = append(imagenes, nombreArchivo)
-			}
-		}
-	}
-
-	if len(imagenes) < cantidad {
-		fmt.Printf("No hay suficientes imágenes en la carpeta. Se encontraron %d imágenes.\n", len(imagenes))
-		return nil
-	}
-
-	rand.Seed(time.Now().UnixNano())
-	var imagenesSeleccionadas []string
-	for i := 0; i < cantidad; i++ {
-		indice := rand.Intn(len(imagenes))
-		imagenesSeleccionadas = append(imagenesSeleccionadas, rutaCarpeta+"\\"+imagenes[indice])
-		imagenes = append(imagenes[:indice], imagenes[indice+1:]...)
-	}
-
-	return imagenesSeleccionadas
 }
 
 func punto9() {
