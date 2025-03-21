@@ -92,14 +92,7 @@ func filtrarImagenes(files []os.FileInfo) []string {
 	return imagenes
 }
 
-func seleccionarImagenesAleatorias(cantidad int) []string {
-
-	rutaCarpeta, files := seleccionarCarpeta()
-	if rutaCarpeta == "" || files == nil {
-		return nil
-	}
-
-	imagenes := filtrarImagenes(files)
+func seleccionarImagenesAleatorias(imagenes []string, cantidad int) []string {
 	if len(imagenes) < cantidad {
 		fmt.Printf("No hay suficientes imágenes en la carpeta. Se encontraron %d imágenes.\n", len(imagenes))
 		return nil
@@ -109,7 +102,7 @@ func seleccionarImagenesAleatorias(cantidad int) []string {
 	var imagenesSeleccionadas []string
 	for i := 0; i < cantidad; i++ {
 		indice := rand.Intn(len(imagenes))
-		imagenesSeleccionadas = append(imagenesSeleccionadas, rutaCarpeta+"\\"+imagenes[indice])
+		imagenesSeleccionadas = append(imagenesSeleccionadas, imagenes[indice])
 		imagenes = append(imagenes[:indice], imagenes[indice+1:]...)
 	}
 
@@ -249,14 +242,20 @@ func punto8() {
 }
 
 func punto9() {
-	imagenesSeleccionadas := seleccionarImagenesAleatorias(4)
+	rutaCarpeta, files := seleccionarCarpeta()
+	if rutaCarpeta == "" || files == nil {
+		return
+	}
+
+	imagenes := filtrarImagenes(files)
+	imagenesSeleccionadas := seleccionarImagenesAleatorias(imagenes, 4)
 	if imagenesSeleccionadas == nil {
 		return
 	}
 
 	for _, imagenSeleccionada := range imagenesSeleccionadas {
 		// Lee el contenido de la imagen seleccionada
-		contenido, err := ioutil.ReadFile(imagenSeleccionada)
+		contenido, err := ioutil.ReadFile(rutaCarpeta + "\\" + imagenSeleccionada)
 		if err != nil {
 			fmt.Println("Error leyendo la imagen:", err)
 			continue
