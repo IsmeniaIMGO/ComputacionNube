@@ -3,35 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <title>Editar Libro</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 15px;
+            color: #555;
+        }
+
+        input, select {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-top: 5px;
+        }
+
+        button {
+            margin-top: 25px;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Editar Libro</h1>
+    <div class="container">
+        <h1>Editar Libro</h1>
 
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
 
-    <form method="post">
-        <label for="titulo">Título:</label>
-        <input type="text" id="titulo" name="titulo" value="{{ libro.titulo }}" required><br>
+        <form method="post">
+            <label for="titulo">Título:</label>
+            <input type="text" id="titulo" name="titulo" value="{{ libro.titulo }}" required>
 
-        <label for="autor_id">Autor:</label>
-        <select id="autor_id" name="autor_id" required>
-            {% for autor in autores %}
-            <option value="{{ autor.id }}" {% if autor.id == libro.autor_id %}selected{% endif %}>{{ autor.nombre }}</option>
-            {% endfor %}
-        </select><br>
+            <label for="autor_id">Autor:</label>
+            <select id="autor_id" name="autor_id" required>
+                {% for autor in autores %}
+                <option value="{{ autor.id }}" {% if autor.id == libro.autor_id %}selected{% endif %}>{{ autor.nombre }}</option>
+                {% endfor %}
+            </select>
 
-        <label for="categoria_id">Categoría:</label>
-        <select id="categoria_id" name="categoria_id" required>
-            {% for categoria in categorias %}
-            <option value="{{ categoria.id }}" {% if categoria.id == libro.categoria_id %}selected{% endif %}>{{ categoria.nombre }}</option>
-            {% endfor %}
-        </select><br>
+            <label for="categoria_id">Categoría:</label>
+            <select id="categoria_id" name="categoria_id" required>
+                {% for categoria in categorias %}
+                <option value="{{ categoria.id }}" {% if categoria.id == libro.categoria_id %}selected{% endif %}>{{ categoria.nombre }}</option>
+                {% endfor %}
+            </select>
 
-        <button type="submit">Guardar Cambios</button>
-    </form>
+            <button type="submit">Guardar Cambios</button>
+        </form>
 
-    <a href="/libros">Volver a Libros</a>
+        <a href="/libros">Volver a Libros</a>
+    </div>
 </body>
 </html>
