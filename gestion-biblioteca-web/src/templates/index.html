@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión Biblioteca</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Imagen de fondo */
+        body {
+            background-image: url("{{ url_for('static', filename='fondo.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* Capa que desenfoca el fondo */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            backdrop-filter: blur(10px);
+            background-color: rgba(0, 0, 0, 0.4); /* oscurecer un poco para contraste */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contenido {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .contenido h1 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+        }
+
+        .contenido a {
+            display: inline-block;
+            margin: 10px;
+            padding: 12px 20px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border: 1px solid white;
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .contenido a:hover {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <div class="contenido">
+            <h1>Bienvenido a la Biblioteca</h1>
+            <a href="/libros">Ver Libros</a>
+            <a href="/autores">Ver Autores</a>
+            <a href="/categorias">Ver Categorías</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+-- Crear base de datos
+CREATE DATABASE IF NOT EXISTS biblioteca CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE biblioteca;
+
+-- Tabla autor
+CREATE TABLE IF NOT EXISTS autor (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL
+);
+
+-- Tabla categoria
+CREATE TABLE IF NOT EXISTS categoria (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL
+);
+
+-- Tabla libro
+CREATE TABLE IF NOT EXISTS libro (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    autor_id INT NOT NULL,
+    categoria_id INT NOT NULL,
+    FOREIGN KEY (autor_id) REFERENCES autor(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (categoria_id) REFERENCES categoria(id) ON DELETE RESTRICT ON UPDATE CASCADE
+);

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Libros</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f9fafb;
+            color: #2c3e50;
+            margin: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            font-weight: 700;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+
+        a.button, button {
+            background-color: #3498db;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        a.button:hover, button:hover {
+            background-color: #2980b9;
+        }
+
+        a#add-book {
+            align-self: flex-start;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        table {
+            width: 100%;
+            max-width: 900px;
+            border-collapse: collapse;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 14px 20px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f1f9ff;
+        }
+
+        td.actions {
+            white-space: nowrap;
+        }
+
+        td.actions form {
+            display: inline;
+            margin: 0;
+        }
+
+        a.action-link {
+            color: #2980b9;
+            text-decoration: none;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        a.action-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+            thead tr {
+                display: none;
+            }
+            tr {
+                margin-bottom: 15px;
+                box-shadow: 0 0 5px rgba(0,0,0,0.1);
+                border-radius: 8px;
+                padding: 12px;
+            }
+            td {
+                border: none;
+                padding: 8px 10px;
+                position: relative;
+                padding-left: 50%;
+                text-align: right;
+            }
+            td::before {
+                position: absolute;
+                left: 15px;
+                width: 45%;
+                white-space: nowrap;
+                font-weight: 600;
+                text-align: left;
+                content: attr(data-label);
+                color: #555;
+            }
+            td.actions {
+                padding-left: 15px;
+                text-align: center;
+            }
+        }
+
+        a.back-link {
+            margin-top: 25px;
+            font-size: 1rem;
+            color: #555;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a.back-link:hover {
+            color: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <h1>Listado de Libros</h1>
+    <a id="add-book" class="button" href="/agregar_libro">Agregar Libro</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Categoría</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for libro in libros %}
+            <tr>
+                <td data-label="ID">{{ libro.id }}</td>
+                <td data-label="Título">{{ libro.titulo }}</td>
+                <td data-label="Autor">{{ libro.autor }}</td>
+                <td data-label="Categoría">{{ libro.categoria }}</td>
+                <td class="actions" data-label="Acciones">
+                    <a class="action-link" href="{{ url_for('editar_libro', libro_id=libro.id) }}">Editar</a>
+                    <form action="{{ url_for('eliminar_libro', libro_id=libro.id) }}" method="post" onsubmit="return confirm('¿Seguro que deseas eliminar este libro?');" style="display:inline;">
+                        <button type="submit">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5" style="text-align:center; padding: 20px;">No hay libros disponibles</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="/" class="back-link">← Volver al inicio</a>
+</body>
+</html>

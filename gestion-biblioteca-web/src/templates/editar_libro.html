@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Libro</title>
+</head>
+<body>
+    <h1>Editar Libro</h1>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="post">
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo" name="titulo" value="{{ libro.titulo }}" required><br>
+
+        <label for="autor_id">Autor:</label>
+        <select id="autor_id" name="autor_id" required>
+            {% for autor in autores %}
+            <option value="{{ autor.id }}" {% if autor.id == libro.autor_id %}selected{% endif %}>{{ autor.nombre }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="categoria_id">Categoría:</label>
+        <select id="categoria_id" name="categoria_id" required>
+            {% for categoria in categorias %}
+            <option value="{{ categoria.id }}" {% if categoria.id == libro.categoria_id %}selected{% endif %}>{{ categoria.nombre }}</option>
+            {% endfor %}
+        </select><br>
+
+        <button type="submit">Guardar Cambios</button>
+    </form>
+
+    <a href="/libros">Volver a Libros</a>
+</body>
+</html>

@@ -1,0 +1,9 @@
+nameHost=fedora,nameIP=192.168.127.30,dateFormat=2025-05-04T18:10:23,cpu=92,ram=1316,disk=84
+nameHost=fedora,nameIP=192.168.127.30,dateFormat=2025-05-04T18:10:38,cpu=96,ram=1361,disk=84
+nameHost=fedora,nameIP=192.168.127.30,dateFormat=2025-05-04T18:10:54,cpu=91,ram=1226,disk=84
+nameHost=fedora,nameIP=192.168.127.30,dateFormat=2025-05-04T18:11:09,cpu=98,ram=1256,disk=84
+nameHost=fedora,nameIP=192.168.127.30,dateFormat=2025-05-04T18:11:24,cpu=98,ram=1281,disk=84
+nameHost=fedora,nameIP=192.168.127.30,dateFormat=2025-05-04T18:11:39,cpu=97,ram=1282,disk=84
+nameHost=fedora,nameIP=192.168.127.30,dateFormat=2025-05-04T18:11:55,cpu=100,ram=1291,disk=84
+nameHost=fedora,nameIP=192.169.127.30,dateFormat=2024-05-04T18:12:10,cpu=93,ram=1232,disk=85
+STATE_NOT_STRESED,-,-,-,-,-
